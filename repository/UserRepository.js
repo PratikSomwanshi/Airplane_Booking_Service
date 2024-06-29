@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const { StatusCodes } = require("http-status-codes");
 
 const User = require("../model/User");
-const CrudRepository = require("./CrudRepository");
+const CrudRepository = require("./crudrepository");
 
 class UserRepository extends CrudRepository {
     constructor() {
