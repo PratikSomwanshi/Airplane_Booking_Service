@@ -3,43 +3,44 @@ class CrudRepository {
         this.model = model;
     }
 
-    // Create a new user
-    async createUser(data) {
+    // Create a new response
+
+    // Find a response by ID
+    async findById(id) {
         try {
-            const user = await this.model.create(data);
-            return user;
+            const response = await this.model.findById(id);
+            return response;
         } catch (error) {
             throw error;
         }
     }
 
-    // Find a user by ID
-    async findUserById(id) {
+    async create(data) {
         try {
-            const user = await this.model.findById(id);
-            return user;
+            const response = await this.model.create(data);
+            return response;
         } catch (error) {
             throw error;
         }
     }
 
-    // Update a user by ID
-    async updateUserById(id, data) {
+    // Update a response by ID
+    async updateById(id, data) {
         try {
-            const user = await this.model.findByIdAndUpdate(id, data, {
+            const response = await this.model.findByIdAndUpdate(id, data, {
                 new: true,
             });
-            return user;
+            return response;
         } catch (error) {
             throw error;
         }
     }
 
-    // Delete a user by ID
-    async deleteUserById(id) {
+    // Delete a response by ID
+    async deleteById(id) {
         try {
-            const user = await this.model.findByIdAndDelete(id);
-            return user;
+            const response = await this.model.findByIdAndDelete(id);
+            return response;
         } catch (error) {
             throw error;
         }

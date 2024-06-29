@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const flightSchema = new mongoose.Schema({
-    flightNumber: { type: String, required: true },
+    flightNumber: { type: String, required: true, unique: true },
     arrivalCity: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "City",
