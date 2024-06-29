@@ -10,6 +10,10 @@ async function getBooking(userEmail) {
             populate: [{ path: "arrivalCity" }, { path: "departureCity" }],
         });
 
+        if (!booking) {
+            throw Error("Booking not found");
+        }
+
         return booking;
     } catch (error) {
         throw error;
@@ -18,9 +22,6 @@ async function getBooking(userEmail) {
 
 async function bookFlight(data) {
     const { flightNumber, seatNumber, userEmail } = data;
-
-    // const session = await mongoose.startSession();
-    // session.startTransaction();
 
     try {
         if (!flightNumber) {
@@ -32,7 +33,6 @@ async function bookFlight(data) {
             throw new Error("User not found");
         }
 
-        // const opts = { session };
         const flight = await Flight.findOne({ flightNumber });
         if (!flight) {
             throw new Error("Flight not found");
@@ -65,15 +65,37 @@ async function bookFlight(data) {
         flight.seatsAvailable--;
         await flight.save();
 
-        // await session.commitTransaction();
-        // session.endSession();
-
-        return booking; // Return the booking object on success
+        return booking;
     } catch (error) {
-        // await session.abortTransaction();
-        // session.endSession();
-        throw error; // Throw the error to be handled by the caller
+        throw error;
     }
 }
 
-module.exports = { bookFlight, getBooking };
+async function cancelBooking(data) {
+    const { userEmail, seatNumber } = data;
+
+    try {
+        const booking = await Booking.findOneAndDelete(
+            {
+                userEmail,
+                seatNumber,
+            },
+            { new: true }
+        );
+
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+
+        await Seat.findOneAndUpdate(
+            { seatNumber, isBooked: true },
+            { isBooked: false }
+        );
+
+        return booking;
+    } catch (error) {
+        throw error;
+    }
+}
+
+module.exports = { bookFlight, getBooking, cancelBooking };
