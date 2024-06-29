@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const { flightController } = require("../../controller");
 
-router.post("/", flightController.createUser);
+router.post("/", flightController.createFlight);
 
 router.get("/", flightController.getAllFlight);
 

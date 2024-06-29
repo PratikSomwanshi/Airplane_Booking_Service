@@ -14,7 +14,7 @@ const flightSchema = new mongoose.Schema({
     },
     departureTime: { type: Date, required: true },
     arrivalTime: { type: Date, required: true },
-    totalSeats: {
+    availableSeats: {
         type: Number,
         required: true,
     },

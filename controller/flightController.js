@@ -3,7 +3,7 @@ const { flightService } = require("../service");
 const { SuccessResponse, ErrorResponse } = require("../utils/common");
 const CustomError = require("../utils/error/CustomError");
 
-async function createUser(req, res) {
+async function createFlight(req, res) {
     try {
         const response = await flightService.createFlight(req.body);
 
@@ -88,7 +88,7 @@ async function deleteFlight(req, res) {
 }
 
 module.exports = {
-    createUser,
+    createFlight,
     getAllFlight,
     getFlight,
     updateFlight,

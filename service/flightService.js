@@ -4,10 +4,12 @@ const { FlightRepository } = require("../repository");
 
 const flightRepository = new FlightRepository();
 
-async function createFlight() {
+async function createFlight(data) {
     try {
-        const arrivalCity = await City.findOne({ city_id: "BLR" });
-        const departureCity = await City.findOne({ city_id: "CHE" });
+        const arrivalCity = await City.findOne({ city_id: data.arrivalCity });
+        const departureCity = await City.findOne({
+            city_id: data.departureCity,
+        });
 
         if (!arrivalCity) {
             throw Error("invalid arrival city");
@@ -22,12 +24,12 @@ async function createFlight() {
         }
 
         const newFlight = await flightRepository.create({
-            flightNumber: "FL123",
+            flightNumber: data.flightNumber,
             arrivalCity: arrivalCity._id,
             departureCity: departureCity._id,
-            departureTime: new Date(),
-            arrivalTime: new Date(),
-            totalSeats: 150,
+            departureTime: data.departureTime,
+            arrivalTime: data.arrivalTime,
+            availableSeats: data.availableSeats,
         });
 
         return newFlight;

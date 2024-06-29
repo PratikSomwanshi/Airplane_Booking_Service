@@ -1,8 +1,12 @@
 const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema({
-    userId: { type: Number, required: true },
-    flightNumber: { type: String, required: true },
+    userEmail: { type: String, required: true },
+    flight: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Flight",
+        required: true,
+    },
     seatNumber: { type: String, required: true },
 });
 
