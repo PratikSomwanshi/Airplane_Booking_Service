@@ -1,12 +1,15 @@
 const router = require("express").Router();
 
 const { flightController } = require("../../controller");
+const authenticateJWT = require("../../middleware/jwtTokenVerifier");
 
 router.post("/", flightController.createFlight);
 
 router.get("/", flightController.getAllFlight);
 
-router.get("/:id", flightController.getFlight);
+router.get("/single/:id", flightController.getFlight);
+
+router.get("/city", flightController.getFlightByCity);
 
 router.put("/", flightController.updateFlight);
 

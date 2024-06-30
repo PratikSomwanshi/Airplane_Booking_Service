@@ -87,10 +87,28 @@ async function deleteFlight(req, res) {
     }
 }
 
+async function getFlightByCity(req, res) {
+    try {
+        const response = await flightService.getFlightByCity(req.query);
+
+        SuccessResponse.data = response;
+        SuccessResponse.message = "Successfully fetched the Booking";
+
+        return res.status(StatusCodes.OK).json(SuccessResponse);
+    } catch (error) {
+        ErrorResponse.error = {
+            explanation: error.message,
+        };
+
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    }
+}
+
 module.exports = {
     createFlight,
     getAllFlight,
     getFlight,
     updateFlight,
     deleteFlight,
+    getFlightByCity,
 };

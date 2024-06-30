@@ -1,11 +1,12 @@
 const router = require("express").Router();
 
 const { bookingController } = require("../../controller");
+const authenticateJWT = require("../../middleware/jwtTokenVerifier");
 
-router.post("/", bookingController.createBooking);
+router.post("/", authenticateJWT, bookingController.createBooking);
 
-router.get("/:email", bookingController.getBooking);
+router.get("/", authenticateJWT, bookingController.getBooking);
 
-router.delete("/", bookingController.cancelBooking);
+router.delete("/", authenticateJWT, bookingController.cancelBooking);
 
 module.exports = router;

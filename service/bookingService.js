@@ -50,8 +50,11 @@ async function bookFlight(data) {
         );
 
         if (!seat) {
-            console.log(seat);
-            throw new Error("Invalid seat provided");
+            if (await Seat.findOne({ seatNumber, flight: flight._id })) {
+                throw Error(`${seatNumber} Seat is already booked`);
+            } else {
+                throw Error("Invalid seat provided");
+            }
         }
 
         const booking = new Booking({

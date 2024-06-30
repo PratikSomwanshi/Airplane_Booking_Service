@@ -109,10 +109,80 @@ async function deleteFlight(flightNumber) {
     }
 }
 
+async function cancelBooking(data) {
+    const { userEmail, seatNumber } = data;
+
+    try {
+        const booking = await Booking.findOneAndDelete(
+            {
+                userEmail,
+                seatNumber,
+            },
+            { new: true }
+        );
+
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+
+        await Seat.findOneAndUpdate(
+            { seatNumber, isBooked: true },
+            { isBooked: false }
+        );
+
+        return booking;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function getFlightByCity(data) {
+    try {
+        const { arrivalCity, departureCity } = data;
+
+        if (!arrivalCity || !departureCity) {
+            throw Error("arrival city and departure city are required");
+        }
+
+        if (arrivalCity == departureCity) {
+            throw Error("arrival city and departure city can not be same");
+        }
+
+        const fetchArrivalCity = await City.findOne({ city_id: arrivalCity });
+        const fetchDepartureCity = await City.findOne({
+            city_id: departureCity,
+        });
+
+        if (!fetchArrivalCity) {
+            throw Error("Invalid arrival city");
+        }
+
+        if (!fetchDepartureCity) {
+            throw Error("Invalid arrival city");
+        }
+
+        const flights = await Flight.find({
+            arrivalCity: fetchArrivalCity._id,
+            departureCity: fetchDepartureCity._id,
+        })
+            .populate("arrivalCity")
+            .populate("departureCity");
+
+        if (flights.length === 0) {
+            throw Error("No flights found");
+        }
+
+        return flights;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     createFlight,
     getAllFlights,
     getFlight,
     updateFlight,
     deleteFlight,
+    getFlightByCity,
 };
