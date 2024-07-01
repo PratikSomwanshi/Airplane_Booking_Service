@@ -18,6 +18,7 @@ const flightSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    amount: { type: Number, required: true },
 });
 
 const Flight = mongoose.model("Flight", flightSchema);

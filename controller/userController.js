@@ -8,6 +8,8 @@ async function createUser(req, res) {
             email: req.body.email,
             password: req.body.password,
             username: req.body.username,
+            fullName: req.body.fullName,
+            address: req.body.address,
         });
 
         SuccessResponse.data = {

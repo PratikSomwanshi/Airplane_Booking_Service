@@ -7,6 +7,7 @@ const userRepository = new UserRepository();
 
 async function createUser(data) {
     try {
+        console.log("🚀 ~ signIn ~ data:", data);
         const response = await userRepository.createUser(data);
         return response;
     } catch (error) {

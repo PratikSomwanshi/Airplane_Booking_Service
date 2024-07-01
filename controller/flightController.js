@@ -12,8 +12,9 @@ async function createFlight(req, res) {
 
         return res.status(StatusCodes.OK).json(SuccessResponse);
     } catch (error) {
-        ErrorResponse.message = error.message;
-        ErrorResponse.error = error;
+        ErrorResponse.error = {
+            explanation: error.message,
+        };
 
         return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
     }

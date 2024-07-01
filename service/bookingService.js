@@ -24,51 +24,6 @@ async function bookFlight(data) {
     const { flightNumber, seatNumber, userEmail } = data;
 
     try {
-        if (!flightNumber) {
-            throw Error("flight number not present");
-        }
-
-        const user = await User.findOne({ email: userEmail });
-        if (!user) {
-            throw new Error("User not found");
-        }
-
-        const flight = await Flight.findOne({ flightNumber });
-        if (!flight) {
-            throw new Error("Flight not found");
-        }
-
-        if (flight.availableSeats === 0) {
-            throw new Error("No seats available on this flight");
-        }
-
-        console.log(seatNumber, flight._id);
-        const seat = await Seat.findOneAndUpdate(
-            { seatNumber, flight: flight._id, isBooked: false },
-            { isBooked: true },
-            { new: true }
-        );
-
-        if (!seat) {
-            if (await Seat.findOne({ seatNumber, flight: flight._id })) {
-                throw Error(`${seatNumber} Seat is already booked`);
-            } else {
-                throw Error("Invalid seat provided");
-            }
-        }
-
-        const booking = new Booking({
-            userEmail: user.email,
-            flight: flight._id,
-            seatNumber,
-        });
-
-        await booking.save();
-
-        flight.seatsAvailable--;
-        await flight.save();
-
-        return booking;
     } catch (error) {
         throw error;
     }

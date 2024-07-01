@@ -23,6 +23,14 @@ async function createFlight(data) {
             throw Error("arrival and departure city can not be same");
         }
 
+        const existingFlight = await Flight.findOne({
+            flightNumber: data.flightNumber,
+        });
+
+        if (existingFlight) {
+            throw Error("Flight Already Present");
+        }
+
         const newFlight = await flightRepository.create({
             flightNumber: data.flightNumber,
             arrivalCity: arrivalCity._id,
@@ -30,6 +38,7 @@ async function createFlight(data) {
             departureTime: data.departureTime,
             arrivalTime: data.arrivalTime,
             availableSeats: data.availableSeats,
+            amount: data.amount,
         });
 
         return newFlight;
