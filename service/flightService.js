@@ -176,35 +176,39 @@ async function cancelBooking(data) {
 
 async function getFlightByCity(data) {
     try {
-        const { arrivalCity, departureCity } = data;
+        const { arrivalAirport, departureAirport } = data;
 
-        if (!arrivalCity || !departureCity) {
-            throw Error("arrival city and departure city are required");
+        if (!arrivalAirport || !departureAirport) {
+            throw Error("arrival airport and departure airport are required");
         }
 
-        if (arrivalCity == departureCity) {
-            throw Error("arrival city and departure city can not be same");
+        if (arrivalAirport == departureAirport) {
+            throw Error(
+                "arrival airport and departure airport can not be same"
+            );
         }
 
-        const fetchArrivalCity = await City.findOne({ city_id: arrivalCity });
-        const fetchDepartureCity = await City.findOne({
-            city_id: departureCity,
+        const fetchArrivalAirport = await Airport.findOne({
+            code: arrivalAirport,
+        });
+        const fetchDepartureAirport = await Airport.findOne({
+            code: departureAirport,
         });
 
-        if (!fetchArrivalCity) {
-            throw Error("Invalid arrival city");
+        if (!fetchArrivalAirport) {
+            throw Error("Invalid arrival airport");
         }
 
-        if (!fetchDepartureCity) {
-            throw Error("Invalid arrival city");
+        if (!fetchDepartureAirport) {
+            throw Error("Invalid arrival airport");
         }
 
         const flights = await Flight.find({
-            arrivalCity: fetchArrivalCity._id,
-            departureCity: fetchDepartureCity._id,
+            arrivalAirport: fetchArrivalAirport._id,
+            departureAirport: fetchDepartureAirport._id,
         })
-            .populate("arrivalCity")
-            .populate("departureCity");
+            .populate("arrivalAirport")
+            .populate("departureAirport");
 
         if (flights.length === 0) {
             throw Error("No flights found");
