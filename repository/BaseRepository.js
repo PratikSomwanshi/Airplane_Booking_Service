@@ -3,9 +3,15 @@ class BaseRepository {
         this.model = model;
     }
 
-    // Create a new response
+    async findAll() {
+        try {
+            const response = await this.model.find();
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
 
-    // Find a response by ID
     async findById(id) {
         try {
             const response = await this.model.findById(id);
@@ -18,6 +24,7 @@ class BaseRepository {
     async create(data) {
         try {
             const response = await this.model.create(data);
+
             return response;
         } catch (error) {
             throw error;

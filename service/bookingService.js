@@ -20,15 +20,6 @@ async function getBooking(userEmail) {
     }
 }
 
-async function bookFlight(data) {
-    const { flightNumber, seatNumber, userEmail } = data;
-
-    try {
-    } catch (error) {
-        throw error;
-    }
-}
-
 async function cancelBooking(data) {
     const { userEmail, seatNumber } = data;
 
@@ -56,4 +47,4 @@ async function cancelBooking(data) {
     }
 }
 
-module.exports = { bookFlight, getBooking, cancelBooking };
+module.exports = { getBooking, cancelBooking };

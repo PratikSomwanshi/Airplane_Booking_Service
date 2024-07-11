@@ -1,26 +1,40 @@
 const Flight = require("../model/Flight");
 const City = require("../model/City");
 const { FlightRepository } = require("../repository");
+const Airport = require("../model/Airport");
+const Airplane = require("../model/Airplane");
+const CustomError = require("../utils/error/CustomError");
+const { StatusCodes } = require("http-status-codes");
 
 const flightRepository = new FlightRepository();
 
 async function createFlight(data) {
     try {
-        const arrivalCity = await City.findOne({ city_id: data.arrivalCity });
-        const departureCity = await City.findOne({
-            city_id: data.departureCity,
+        const arrivalAirport = await Airport.findOne({
+            code: data.arrivalAirport,
+        });
+        const departureAirport = await Airport.findOne({
+            code: data.departureAirport,
         });
 
-        if (!arrivalCity) {
-            throw Error("invalid arrival city");
+        const airplane = await Airplane.findOne({
+            code: data.airplaneCode,
+        });
+
+        if (!airplane) {
+            throw new CustomError("Airplane not found", StatusCodes.NOT_FOUND);
         }
 
-        if (!departureCity) {
-            throw Error("invalid departure city");
+        if (!arrivalAirport) {
+            throw Error("invalid arrival airport");
         }
 
-        if (arrivalCity == departureCity) {
-            throw Error("arrival and departure city can not be same");
+        if (!departureAirport) {
+            throw Error("invalid departure airport");
+        }
+
+        if (arrivalAirport == departureAirport) {
+            throw Error("arrival and departure airport can not be same");
         }
 
         const existingFlight = await Flight.findOne({
@@ -33,11 +47,12 @@ async function createFlight(data) {
 
         const newFlight = await flightRepository.create({
             flightNumber: data.flightNumber,
-            arrivalCity: arrivalCity._id,
-            departureCity: departureCity._id,
+            airplane: airplane._id,
+            arrivalAirport: arrivalAirport._id,
+            departureAirport: departureAirport._id,
             departureTime: data.departureTime,
             arrivalTime: data.arrivalTime,
-            availableSeats: data.availableSeats,
+            availableSeats: airplane.capacity,
             amount: data.amount,
         });
 
@@ -51,8 +66,22 @@ async function createFlight(data) {
 async function getAllFlights() {
     try {
         const flights = await Flight.find()
-            .populate("arrivalCity", "city_id city_name")
-            .populate("departureCity", "city_id city_name");
+            .populate({
+                path: "arrivalAirport",
+                select: "code name -_id",
+                populate: {
+                    path: "cityId",
+                    select: "city_id city_name -_id",
+                },
+            })
+            .populate({
+                path: "departureAirport",
+                select: "code name -_id",
+                populate: {
+                    path: "cityId",
+                    select: "city_id city_name -_id",
+                },
+            });
 
         return flights;
     } catch (error) {

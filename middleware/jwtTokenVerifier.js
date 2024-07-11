@@ -7,7 +7,7 @@ const authenticateJWT = (req, res, next) => {
 
     if (!token) {
         ErrorResponse.error = {
-            explanation: "Access Denied",
+            explanation: "Access Denied, Authorizaqtion Token Required",
         };
 
         return res.status(StatusCodes.UNAUTHORIZED).json(ErrorResponse);

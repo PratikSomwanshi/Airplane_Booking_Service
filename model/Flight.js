@@ -2,14 +2,19 @@ const mongoose = require("mongoose");
 
 const flightSchema = new mongoose.Schema({
     flightNumber: { type: String, required: true, unique: true },
-    arrivalCity: {
+    airplane: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "City",
+        ref: "Airplane",
         required: true,
     },
-    departureCity: {
+    arrivalAirport: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "City",
+        ref: "Airport",
+        required: true,
+    },
+    departureAirport: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Airport",
         required: true,
     },
     departureTime: { type: Date, required: true },

@@ -3,7 +3,7 @@ const router = require("express").Router();
 const { flightController } = require("../../controller");
 const authenticateJWT = require("../../middleware/jwtTokenVerifier");
 
-router.post("/", flightController.createFlight);
+router.post("/", authenticateJWT, flightController.createFlight);
 
 router.get("/", flightController.getAllFlight);
 

@@ -9,7 +9,6 @@ const User = require("../model/User");
 
 async function createStripeCustomer(email, name, address) {
     try {
-        // console.log(email, name, address);
         const customer = await stripe.customers.create({
             email: email,
             name: name,
@@ -34,7 +33,7 @@ async function paymentCheckout(data) {
         }
         // console.log(data);
         const user = await User.findOne({ email: customerEmail });
-        console.log(user);
+
         if (!user) {
             throw Error("Payment can not be done, User not found");
         }
@@ -47,7 +46,6 @@ async function paymentCheckout(data) {
             throw new Error("No seats available on this flight");
         }
 
-        console.log(seatNumber, flight._id);
         const seat = await Seat.findOneAndUpdate(
             { seatNumber, flight: flight._id, isBooked: false },
             { isBooked: true },
