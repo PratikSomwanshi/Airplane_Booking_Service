@@ -14,7 +14,8 @@ async function createUser(req, res) {
 
         SuccessResponse.data = {
             email: response.email,
-            userName: response.username,
+            userName: response.userName,
+            tocken: response.token,
         };
         SuccessResponse.message = "successfully created the user";
 

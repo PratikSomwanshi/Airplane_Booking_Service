@@ -9,7 +9,25 @@ async function createUser(data) {
     try {
         console.log("🚀 ~ signIn ~ data:", data);
         const response = await userRepository.createUser(data);
-        return response;
+
+        const token = jwt.sign(
+            {
+                email: response.email,
+                id: response._id,
+            },
+            "shhhhh",
+            {
+                expiresIn: "1h",
+            }
+        );
+
+        let res = {
+            token,
+            email: response.email,
+            userName: response.username,
+        };
+
+        return res;
     } catch (error) {
         throw error;
     }
