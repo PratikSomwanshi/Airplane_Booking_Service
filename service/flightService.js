@@ -95,8 +95,8 @@ async function getFlight(id) {
         const flight = await Flight.findOne({
             flightNumber: id,
         })
-            .populate("departureCity", "city_id city_name")
-            .populate("arrivalCity", "city_id city_name");
+            .populate("departureAirport", "-_id name code")
+            .populate("arrivalAirport", "-_id name code");
 
         if (!flight) {
             return res.status(404).json({ message: "Flight not found" });
